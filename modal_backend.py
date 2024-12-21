@@ -1,21 +1,11 @@
 import modal
 
-# Create a Modal stub (a container for functions and resources)
-stub = modal.Stub("pentagram-backend")
+# Create a Modal application
+app = modal.App(name="pentagram-backend")
 
-# Define a Modal image with the required dependencies for Stable Diffusion
-image = modal.Image.debian_slim().pip_install(["torch", "diffusers", "transformers"])
-
-# Define the function to load the Stable Diffusion model
-@stub.function(image=image, gpu="any", timeout=300)
+# Define the function to generate an image
+@app.function()
 def generate_image(prompt: str) -> bytes:
-    """
-    Generates an image based on a text prompt using a Stable Diffusion model.
-    Args:
-        prompt (str): The text description for the image to generate.
-    Returns:
-        bytes: The generated image in byte format.
-    """
     from diffusers import StableDiffusionPipeline
     import torch
     from io import BytesIO
